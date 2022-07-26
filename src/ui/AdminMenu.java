@@ -1,10 +1,22 @@
 package ui;
 
+import api.AdminResource;
+import model.IRoom;
+import model.Room;
+import model.RoomType;
+
+import java.util.List;
 import java.util.Scanner;
 
 public class AdminMenu {
 
     private MainMenu mainMenu;
+    private static AdminResource adminResource;
+
+    public AdminMenu(MainMenu mainMenu, AdminResource adminResource) {
+        this.mainMenu = mainMenu;
+        this.adminResource = adminResource;
+    }
 
     //why did it suggest making the ui package private for this? - other option is to create an instance of
     static void printAdminMenu() {
@@ -40,7 +52,9 @@ public class AdminMenu {
                         case 4:
                             adminMenuChoice = "4";
                             continueRunning = false;
-                            printAdminMenu();
+                            //add a room
+                            addARoom(scanner);
+                           // adminResource.addRoom();
                             break;
                         case 5:
                             adminMenuChoice = "5";
@@ -58,5 +72,21 @@ public class AdminMenu {
                 }
             }
         }
+    }
+
+    private static void addARoom(Scanner scanner) {
+        System.out.println("Enter a room number");
+        String roomNumber = scanner.nextLine();
+
+        System.out.println("Enter price per night: ");
+        String pricePerNightAsString = scanner.nextLine();
+        double pricePerNight = Double.parseDouble(pricePerNightAsString);
+
+        System.out.println("Enter room type: 1 for Single bed or 2 for double bed.: ");
+        String roomTypeAsString = scanner.nextLine();
+        RoomType roomType = RoomType.valueOf(roomTypeAsString);
+
+        Room room = new Room(pricePerNight, roomType, roomNumber);
+        adminResource.addRoom((List<IRoom>) room);  //find a better way to do this
     }
 }

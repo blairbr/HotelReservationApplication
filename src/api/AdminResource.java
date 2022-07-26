@@ -14,7 +14,7 @@ public class AdminResource {
         //to get to compile
     };
 
-    public void addRoom(List<IRoom> rooms) {
+    public void addRoom(List<IRoom> rooms) {  //should AddRoom be taking in a List of rooms? Dont we just want to add one room here?
         //to get to compile
     };
 

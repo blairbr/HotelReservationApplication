@@ -3,18 +3,11 @@ package ui;
 import java.util.Scanner;
 
 public class MainMenu {
-
-    private AdminMenu adminMenu;
-
-    public MainMenu(AdminMenu adminMenu) {
-        this.adminMenu = adminMenu;
-    }
-
     public static void main(String[] args) {
         printMainMenu();
     }
 
-    static void printMainMenu() {
+    public static void printMainMenu() {
         System.out.println("Welcome To Blair's Hotel Reservation Application. ");
         boolean continueRunning = true;
 
@@ -34,29 +27,23 @@ public class MainMenu {
 
                     switch (menuChoiceAsInteger) {
                         case 1:
-                            menuChoice = "1";
                             continueRunning = false;
                             break;
                         case 2:
-                            menuChoice = "2";
                             continueRunning = false;
                             break;
                         case 3:
-                            menuChoice = "3";
                             continueRunning = false;
                             break;
                         case 4:
-                            menuChoice = "4";
                             AdminMenu.printAdminMenu();
                             continueRunning = false;
                             break;
                         case 5:
-                            menuChoice = "5";
                             System.out.println("Exiting the application.");
                             continueRunning = false;
                             break;
                         default:
-                            menuChoice = "Invalid choice";
                             break;
 
                     }

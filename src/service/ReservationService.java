@@ -17,7 +17,9 @@ public class ReservationService {
     }
 
     //stuffs
+    //Create a Collections to store and retrieve a reservatin
     private Collection<Reservation> reservations = new ArrayList<>();
+
     private Map<String, IRoom> roomMap = new HashMap<>();
 
     public void addRoom(IRoom room) {
@@ -41,8 +43,4 @@ public class ReservationService {
     };
     public void printAllReservation() {
     }
-};
-
-    //Create a Collections to store and retrieve a reservatin
-    //provide a static reference
-
+}

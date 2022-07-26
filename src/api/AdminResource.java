@@ -7,7 +7,18 @@ import java.util.Collection;
 import java.util.List;
 
 public class AdminResource {
-    //provide a static reference
+    //0. provide a static reference
+
+    //1. create an object of Admin Resource
+    private static AdminResource adminResource = new AdminResource();
+
+    //2. make the constructor private so that this class cannot be instantiated
+    private AdminResource() {}
+
+    //3. get the instance (the only one available)
+    public static AdminResource getInstance() {
+        return adminResource;
+    }
 
     public Customer getCustomer(String email) {
         return null;
@@ -16,6 +27,7 @@ public class AdminResource {
 
     public void addRoom(List<IRoom> rooms) {  //should AddRoom be taking in a List of rooms? Dont we just want to add one room here?
         //to get to compile
+
     };
 
     public Collection<IRoom> getAllRooms() {

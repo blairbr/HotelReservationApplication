@@ -2,6 +2,7 @@ package api;
 
 import model.Customer;
 import model.IRoom;
+import service.ReservationService;
 
 import java.util.Collection;
 import java.util.List;
@@ -10,12 +11,12 @@ public class AdminResource {
     //0. provide a static reference
 
     //1. create an object of Admin Resource
-    private static AdminResource adminResource = new AdminResource();
+    private static final AdminResource adminResource = new AdminResource();
 
     //2. make the constructor private so that this class cannot be instantiated
     private AdminResource() {}
 
-    //3. get the instance (the only one available)
+    //3. get the instance (the only one available) return the singleton
     public static AdminResource getInstance() {
         return adminResource;
     }
@@ -26,8 +27,9 @@ public class AdminResource {
     };
 
     public void addRoom(List<IRoom> rooms) {  //should AddRoom be taking in a List of rooms? Dont we just want to add one room here?
-        //to get to compile
-
+        for (IRoom room : rooms) {
+            ReservationService.getInstance().addRoom(room);
+        }
     };
 
     public Collection<IRoom> getAllRooms() {

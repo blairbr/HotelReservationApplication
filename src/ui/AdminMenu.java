@@ -5,6 +5,7 @@ import model.IRoom;
 import model.Room;
 import model.RoomType;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -59,18 +60,58 @@ public class AdminMenu {
     }
 
     private static void addARoom(Scanner scanner) {
-        System.out.println("Enter a room number");
-        String roomNumber = scanner.nextLine();
+        String roomNumberAsString = "";
+        boolean roomNumberIsValid = false;
+
+        while (!roomNumberIsValid) {
+            System.out.println("Enter a room number");
+            roomNumberAsString = scanner.nextLine();
+            roomNumberIsValid = checkIfRoomNumberIsValid(roomNumberAsString, scanner);
+        }
 
         System.out.println("Enter price per night: ");
         String pricePerNightAsString = scanner.nextLine();
         double pricePerNight = Double.parseDouble(pricePerNightAsString);
 
-        System.out.println("Enter room type: 1 for Single bed or 2 for double bed.: ");
-        String roomTypeAsString = scanner.nextLine();
-        RoomType roomType = RoomType.valueOf(roomTypeAsString);
+        System.out.println("Enter room type - 1 for single bed or 2 for double bed: ");
+        String roomTypeAsString = scanner.nextLine().toUpperCase();
 
-        Room room = new Room(pricePerNight, roomType, roomNumber);
-        AdminResource.getInstance().addRoom((List<IRoom>) room);  //find a better way to do this
+        //default to single - fix this later and add validation - there has to be a way to use the value of too
+        RoomType roomType = RoomType.SINGLE;
+
+        //roomType = RoomType.valueOf(roomTypeAsString);
+        if (roomTypeAsString.equals("1")) {
+            roomType = RoomType.SINGLE;
+        }
+
+        else if (roomTypeAsString.equals("2")) {
+            roomType = RoomType.DOUBLE;
+        }
+
+        IRoom room = new Room(pricePerNight, roomType, roomNumberAsString);
+        List<IRoom> rooms = new ArrayList<IRoom>();
+
+        rooms.add(room);
+        AdminResource.getInstance().addRooms(rooms);
+
+        System.out.println("Would you like to add another room? Y or N");
+        String userChoiceToAddAnotherRoom = scanner.nextLine();
+
+        if (userChoiceToAddAnotherRoom.equalsIgnoreCase("Y")) {
+            addARoom(scanner);
+        }
+
+        else System.out.println("Returning to the Main Menu.");
+        MainMenu.printMainMenu();
+    }
+
+    private static boolean checkIfRoomNumberIsValid(String roomNumberAsString, Scanner scanner) {
+        try {
+            Integer.parseInt(roomNumberAsString);
+            return true;
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid room number.");
+            return false;
+        }
     }
 }

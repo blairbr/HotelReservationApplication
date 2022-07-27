@@ -26,7 +26,7 @@ public class AdminResource {
         //to get to compile
     };
 
-    public void addRoom(List<IRoom> rooms) {  //should AddRoom be taking in a List of rooms? Dont we just want to add one room here?
+    public void addRooms(List<IRoom> rooms) {  //should AddRoom be taking in a List of rooms? Dont we just want to add one room here?
         for (IRoom room : rooms) {
             ReservationService.getInstance().addRoom(room);
         }

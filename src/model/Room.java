@@ -15,19 +15,44 @@ public class Room implements IRoom {
 
     @Override
     public String getRoomNumber() {
-        return null;
+        return roomNumber;
     }
 
-    @Override
-    public Double getRoomPrice() {
-        return null;
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     @Override
     public RoomType getRoomType() {
-        return null;
+        return roomType;
     }
 
+    public void setRoomType(RoomType roomType) {
+        this.roomType = roomType;
+    }
+//    @Override
+//    public String getRoomNumber() {
+//        return null;
+//    }
+//
+    @Override
+    public Double getRoomPrice() {
+        return null;
+    }
+//
+//    @Override
+//    public RoomType getRoomType() {
+//        return null;
+//    }
+//
     @Override
     public boolean isFree() {
         return false;

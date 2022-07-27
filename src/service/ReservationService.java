@@ -26,15 +26,24 @@ public class ReservationService {
     public void addRoom(IRoom room) {
         try {
             checkIfRoomAlreadyExists(room);
+            roomMap.put(room.getRoomNumber(), room);
+            System.out.println("ROOM LIST = " + roomMap);
+            if (roomMap.containsKey(room.getRoomNumber())) {
+                System.out.println("Room " + room.getRoomNumber() + "was successfully added..");
+            }
         }
         catch (Exception ex) {
-            ex.getLocalizedMessage();
+            //ex.getLocalizedMessage();
+            System.out.println(ex.getLocalizedMessage());
         }
-        roomMap.put(room.getRoomNumber(), room);
+
     }
 
     private void checkIfRoomAlreadyExists(IRoom room) throws DuplicateRoomException {
         //try()
+        System.out.println("PRINTING THE MAP AT THIS POINT: " +  roomMap);
+
+        System.out.println("Room getRoomNumber() " + room.getRoomNumber());
         if (roomMap.containsKey(room.getRoomNumber())) {
             //throw an exception and catch it higher up the chain.
             throw new DuplicateRoomException("This room number already exists in the system.");

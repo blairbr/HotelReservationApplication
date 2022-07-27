@@ -54,6 +54,12 @@ public class ReservationService {
             return null;
             //to get to compile
     }
+
+    public Collection<IRoom> getAllRooms() {
+        System.out.println("Called getAllRooms() in the ReservationService");
+        return roomMap.values();
+    }
+
     public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkoutDate) {
         return null;
         //to get to compile

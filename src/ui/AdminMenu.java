@@ -6,6 +6,7 @@ import model.Room;
 import model.RoomType;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 
@@ -32,7 +33,10 @@ public class AdminMenu {
                             continueRunning = false;
                             break;
                         case 2:
+                            //See all Rooms
                             continueRunning = false;
+                            displayAllRooms();
+                            MainMenu.printMainMenu();
                             break;
                         case 3:
                             continueRunning = false;
@@ -41,7 +45,6 @@ public class AdminMenu {
                             continueRunning = false;
                             //add a room
                             addARoom(scanner);
-                           // adminResource.addRoom();
                             break;
                         case 5:
                             System.out.println("Returning to the main menu.");
@@ -52,10 +55,19 @@ public class AdminMenu {
                             break;
 
                     }
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                     System.out.println("Error - Invalid Input. Enter a value between 1 and 5.");
                 }
             }
+        }
+    }
+
+    private static void displayAllRooms() {
+        var allRooms = AdminResource.getInstance().getAllRooms();
+
+        for (IRoom room:allRooms) {
+            System.out.println(room);
         }
     }
 
@@ -79,7 +91,6 @@ public class AdminMenu {
         //default to single - fix this later and add validation - there has to be a way to use the value of too
         RoomType roomType = RoomType.SINGLE;
 
-        //roomType = RoomType.valueOf(roomTypeAsString);
         if (roomTypeAsString.equals("1")) {
             roomType = RoomType.SINGLE;
         }

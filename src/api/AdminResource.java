@@ -33,9 +33,9 @@ public class AdminResource {
     };
 
     public Collection<IRoom> getAllRooms() {
-        return null;
-        //to get to compile
-    };
+        var allRooms = ReservationService.getInstance().getAllRooms();
+        return allRooms;
+    }
 
     public Collection<Customer> getAllCustomers() {
         return null;

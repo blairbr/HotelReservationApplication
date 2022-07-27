@@ -8,7 +8,6 @@ public class MainMenu {
     }
 
     public static void printMainMenu() {
-        System.out.println("Welcome To Blair's Hotel Reservation Application. ");
         boolean continueRunning = true;
 
         try (Scanner scanner = new Scanner(System.in)) {

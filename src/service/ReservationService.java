@@ -21,7 +21,7 @@ public class ReservationService {
     private Collection<Reservation> reservations = new ArrayList<>();
 
     //A collection to store all the rooms
-    private Map<String, IRoom> roomMap = new HashMap<>();
+    private Map<String, IRoom> roomMap = new HashMap<String, IRoom>();
 
     public void addRoom(IRoom room) {
         try {

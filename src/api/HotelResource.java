@@ -3,6 +3,7 @@ package api;
 import model.Customer;
 import model.IRoom;
 import model.Reservation;
+import service.CustomerService;
 
 import java.util.Collection;
 import java.util.Date;
@@ -24,11 +25,11 @@ public class HotelResource {
     }
 
     public Customer getCustomer(String email) {
-        //this should basically just call the service class
-        return null;
-        //to get to compile
+        var customer = CustomerService.getInstance().getCustomer(email);
+        return customer;
     }
     public void createACustomer(String email, String firstName, String lastName) {
+        CustomerService.getInstance().addCustomer(email, firstName, lastName);
     }
 
     public IRoom getRoom(String roomNumber) {

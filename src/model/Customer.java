@@ -3,26 +3,24 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Customer {
+    private String email;
     private String firstName;
     private String lastName;
-    private String email;
 
     private final String emailRegex = "^(.+)@(.+).(.+)$";
     private final Pattern pattern = Pattern.compile(emailRegex);
-    //private final Matcher matcher = pattern.matcher("jeff@example.com"); //not used
 
-    public Customer(String firstName, String lastName, String email)
+    public Customer(String email, String firstName, String lastName)
     {
         if(!pattern.matcher(email).matches()){
             throw new IllegalArgumentException("Error, invalid email address");
         }
-
+        this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
     }
 
-    //how do you know which need getters and setters?
+    //how do you know which need getters and setters? a) you need for all private properties on the class
     public String getFirstName() {
         return firstName;
     }

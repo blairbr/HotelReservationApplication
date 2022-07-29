@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class AdminMenu {
     public static void printAdminMenu() {
@@ -36,6 +37,8 @@ public class AdminMenu {
                             //See all Rooms
                             continueRunning = false;
                             displayAllRooms();
+                            //sleep for 2 seconds so the menu doesn't cover the rooms
+                            TimeUnit.SECONDS.sleep(2);
                             MainMenu.printMainMenu();
                             break;
                         case 3:
@@ -69,6 +72,7 @@ public class AdminMenu {
         for (IRoom room:allRooms) {
             System.out.println(room);
         }
+
     }
 
     private static void addARoom(Scanner scanner) {

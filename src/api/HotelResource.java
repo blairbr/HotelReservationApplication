@@ -4,6 +4,7 @@ import model.Customer;
 import model.IRoom;
 import model.Reservation;
 import service.CustomerService;
+import service.ReservationService;
 
 import java.util.Collection;
 import java.util.Date;
@@ -40,9 +41,11 @@ public class HotelResource {
         // why are these methods public and not private??
     }
 
+    //need to get the customer by the email
     public Reservation bookARoom(String customerEmail, IRoom room, Date checkInDate, Date checkOutDate) {
-        return null;
-        //to get to compile
+        var customer = HotelResource.getInstance().getCustomer(customerEmail);
+        var reservation = ReservationService.getInstance().reserveARoom(customer, room, checkInDate, checkOutDate);
+        return reservation;
     }
 
     public Collection<Reservation> getCustomersReservations(String customerEmail) {

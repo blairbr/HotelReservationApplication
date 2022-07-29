@@ -30,6 +30,7 @@ public class CustomerService {
         try {
             Customer customer = new Customer(email, firstName, lastName);
             customersMap.put(customer.getEmail(), customer);
+            // dont add if customer already exists
             if (customersMap.containsKey(customer.getEmail())) {
                 System.out.println("Account for " + customer.getFirstName() + " " + customer.getLastName() + " was successfully added.");
             }
@@ -41,6 +42,7 @@ public class CustomerService {
 
     public Customer getCustomer(String customerEmail)
     {
+        //will this error out if customer map is null?
         boolean customerFound = customersMap.containsKey(customerEmail);
         if (customerFound) {
             return customersMap.get(customerEmail);
@@ -49,8 +51,7 @@ public class CustomerService {
     }
 
     public Collection<Customer> getAllCustomers() {
-        //so it compliles
-        return null;
+        return customersMap.values();
     }
 
 

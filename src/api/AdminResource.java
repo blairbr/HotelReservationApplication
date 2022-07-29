@@ -2,6 +2,7 @@ package api;
 
 import model.Customer;
 import model.IRoom;
+import service.CustomerService;
 import service.ReservationService;
 
 import java.util.Collection;
@@ -38,11 +39,11 @@ public class AdminResource {
     }
 
     public Collection<Customer> getAllCustomers() {
-        return null;
-        //to get to compile
+        var customers = CustomerService.getInstance().getAllCustomers();
+        return customers;
     };
 
     public void displayAllReservations() {
-
+        ReservationService.getInstance().printAllReservations();
     };
 }

@@ -1,14 +1,14 @@
 package ui;
 
 import api.AdminResource;
-import model.IRoom;
-import model.Room;
-import model.RoomType;
+import api.HotelResource;
+import com.sun.tools.javac.Main;
+import model.*;
+import service.CustomerService;
+import service.ReservationService;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Scanner;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class AdminMenu {
@@ -24,13 +24,17 @@ public class AdminMenu {
                     System.out.println("2. See all Rooms");
                     System.out.println("3. See all Reservations");
                     System.out.println("4. Add a Room");
-                    System.out.println("5. Back to Main Menu");
+                    System.out.println("5. Seed Test Data");
+                    System.out.println("6. Back to Main Menu");
 
                     String adminMenuChoice = scanner.nextLine();
                     int adminMenuChoiceAsInteger = Integer.parseInt(adminMenuChoice);
 
                     switch (adminMenuChoiceAsInteger) {
                         case 1:
+                            printAllCustomers();
+                            TimeUnit.SECONDS.sleep(2);
+                            MainMenu.printMainMenu();
                             continueRunning = false;
                             break;
                         case 2:
@@ -41,15 +45,22 @@ public class AdminMenu {
                             TimeUnit.SECONDS.sleep(2);
                             MainMenu.printMainMenu();
                             break;
-                        case 3:
+                        case 3://SEE ALL RESERVATIONS
+                            AdminResource.getInstance().displayAllReservations();
                             continueRunning = false;
+                            MainMenu.printMainMenu();
                             break;
-                        case 4:
+                        case 4://add a room
                             continueRunning = false;
-                            //add a room
                             addARoom(scanner);
+                            MainMenu.printMainMenu();
                             break;
                         case 5:
+                            continueRunning = false;
+                            seedTestData(scanner);
+                            MainMenu.printMainMenu();
+                            break;
+                        case 6:
                             System.out.println("Returning to the main menu.");
                             continueRunning = false;
                             MainMenu.printMainMenu();
@@ -60,14 +71,79 @@ public class AdminMenu {
                     }
                 }
                 catch (Exception ex) {
-                    System.out.println("Error - Invalid Input. Enter a value between 1 and 5.");
+                    System.out.println("Error - Invalid Input. Returning to Main Menu.");
                 }
             }
         }
     }
 
+    private static void printAllCustomers() {
+        var allCustomers = AdminResource.getInstance().getAllCustomers();
+
+        if (allCustomers.isEmpty()) {
+            System.out.println("No customers have been found in the system.");
+            return;
+        }
+        for (Customer customer: allCustomers) {
+            System.out.println(customer);
+        }
+    }
+
+    private static void seedTestData(Scanner scanner) {
+        IRoom room101 = new Room(150.0, RoomType.SINGLE, "101");
+        IRoom room102 = new Room(175.0, RoomType.DOUBLE, "102");
+        IRoom room103 = new Room(200.0, RoomType.DOUBLE, "103");
+        List<IRoom> testRooms = Arrays.asList(room101, room102, room103);
+        AdminResource.getInstance().addRooms(testRooms);
+
+        Customer customer1 = new Customer("billjenkins@hotmail.com", "Bill", "Jenkins");
+        Customer customer2 = new Customer("Danielle.Riveras@gmail.com", "Danielle", "Riveras-Rojas");
+        Customer customer3 = new Customer("Arjun.Submaranian@juno.com", "Arjun", "Submaranian");
+
+        List<Customer> customersList = new ArrayList<Customer>(Arrays.asList(customer1, customer2, customer3));
+
+        for (Customer customer : customersList) {
+            CustomerService.getInstance().addCustomer(customer.getEmail(), customer.getFirstName(), customer.getLastName());
+        }
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.set(2022, Calendar.JULY, 2);
+        Date july2 = calendar.getTime();
+
+        calendar.set(2022, Calendar.JULY, 7);
+        Date july7 = calendar.getTime();
+
+        calendar.set(2022, Calendar.APRIL, 1);
+        Date april1 = calendar.getTime();
+
+        calendar.set(2022, Calendar.APRIL, 4);
+        Date april4 = calendar.getTime();
+
+        System.out.println("April 4 = " + april4);
+        System.out.println("July 7 = " + july7);
+
+        calendar.set(2022, Calendar.AUGUST, 27);
+        Date august27 = calendar.getTime();
+
+        calendar.set(2022, Calendar.AUGUST, 28);
+        Date august28 = calendar.getTime();
+
+        var reservation1 = HotelResource.getInstance().bookARoom(customer1.getEmail(), room101, april1, april4);
+        var reservation2 = HotelResource.getInstance().bookARoom(customer2.getEmail(), room102, july2, july7);
+        var reservation3 = HotelResource.getInstance().bookARoom(customer3.getEmail(), room102, august27, august28);
+
+
+
+    }
+
     private static void displayAllRooms() {
         var allRooms = AdminResource.getInstance().getAllRooms();
+
+        if (allRooms.isEmpty()) {
+            System.out.println("No rooms have been found in the system.");
+            return;
+        }
 
         for (IRoom room:allRooms) {
             System.out.println(room);

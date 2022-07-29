@@ -29,7 +29,7 @@ public class ReservationService {
             roomMap.put(room.getRoomNumber(), room);
             System.out.println("ROOM LIST = " + roomMap);
             if (roomMap.containsKey(room.getRoomNumber())) {
-                System.out.println("Room " + room.getRoomNumber() + "was successfully added..");
+                System.out.println("Room " + room.getRoomNumber() + " was successfully added.");
             }
         }
         catch (Exception ex) {
@@ -61,17 +61,32 @@ public class ReservationService {
     }
 
     public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkoutDate) {
-        return null;
-        //to get to compile
+        var reservation = new Reservation(customer, room, checkInDate, checkoutDate);
+        try {
+            reservations.add(reservation);
+        }
+        catch (Exception ex) {
+
+        }
+        return reservation;
     }
     public Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
         return null;
         //to get to compile
+
     }
     public Collection<Reservation> getCustomersReservation(Customer customer) {
         return null;
         //to get to compile
     }
-    public void printAllReservation() {
+    public void printAllReservations() {
+        if (reservations.isEmpty()) {
+            System.out.println("No reservations were found in the system.");
+            return;
+        }
+        for (Reservation reservation : reservations ) {
+            System.out.println(reservation.toString());
+        }
+
     }
 }

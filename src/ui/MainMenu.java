@@ -17,11 +17,11 @@ public class MainMenu {
         try (Scanner scanner = new Scanner(System.in)) {
             while (continueRunning) {
                 try {
-                    System.out.println("MAIN MENU - Please choose from one of the options below.");
+                    System.out.println("==== MAIN MENU ==== Please choose from one of the options below.");
 
                     System.out.println("1. Find and reserve a room");
-                    System.out.println("2. FIND A USER BY EMAIL - hijacking 2. See my reservations"); //test this out more
-                    System.out.println("3. Create an account");//debug and figure out why regex isnt working
+                    System.out.println("2. FIND A USER BY EMAIL - hijacking 2. See my reservations");
+                    System.out.println("3. Create an account");
                     System.out.println("4. Admin");
                     System.out.println("5. Exit");
 

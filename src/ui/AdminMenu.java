@@ -93,14 +93,17 @@ public class AdminMenu {
         IRoom room101 = new Room(150.0, RoomType.SINGLE, "101");
         IRoom room102 = new Room(175.0, RoomType.DOUBLE, "102");
         IRoom room103 = new Room(200.0, RoomType.DOUBLE, "103");
-        List<IRoom> testRooms = Arrays.asList(room101, room102, room103);
+        IRoom room104 = new Room(200.0, RoomType.SINGLE, "104");
+        List<IRoom> testRooms = Arrays.asList(room101, room102, room103, room104);
         AdminResource.getInstance().addRooms(testRooms);
 
         Customer customer1 = new Customer("billjenkins@hotmail.com", "Bill", "Jenkins");
         Customer customer2 = new Customer("Danielle.Riveras@gmail.com", "Danielle", "Riveras-Rojas");
         Customer customer3 = new Customer("Arjun.Submaranian@juno.com", "Arjun", "Submaranian");
+        Customer customer4 = new Customer("me@me.com", "Blair", "Brown");
 
-        List<Customer> customersList = new ArrayList<Customer>(Arrays.asList(customer1, customer2, customer3));
+
+        List<Customer> customersList = new ArrayList<Customer>(Arrays.asList(customer1, customer2, customer3, customer4));
 
         for (Customer customer : customersList) {
             CustomerService.getInstance().addCustomer(customer.getEmail(), customer.getFirstName(), customer.getLastName());
@@ -129,9 +132,19 @@ public class AdminMenu {
         calendar.set(2022, Calendar.AUGUST, 28);
         Date august28 = calendar.getTime();
 
+        calendar.set(2022, Calendar.SEPTEMBER, 17);
+        Date sept17 = calendar.getTime();
+
+        calendar.set(2022, Calendar.SEPTEMBER, 19);
+        Date sept19 = calendar.getTime();
+
         var reservation1 = HotelResource.getInstance().bookARoom(customer1.getEmail(), room101, april1, april4);
         var reservation2 = HotelResource.getInstance().bookARoom(customer2.getEmail(), room102, july2, july7);
         var reservation3 = HotelResource.getInstance().bookARoom(customer3.getEmail(), room102, august27, august28);
+        var reservation4 = HotelResource.getInstance().bookARoom(customer4.getEmail(), room104, august27, august28);
+        var reservation5 = HotelResource.getInstance().bookARoom(customer4.getEmail(), room104, sept17, sept19);
+
+
 
 
 

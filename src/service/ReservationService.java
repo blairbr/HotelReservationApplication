@@ -8,20 +8,23 @@ import java.util.*;
 
 public class ReservationService {
     //no 1. private constructors
-    private ReservationService() {};
+    private ReservationService() {}
     //no 2.
-    private static ReservationService reservationService = new ReservationService();
+    private static final ReservationService reservationService = new ReservationService();
     //no 3.
     public static ReservationService getInstance() {
         return reservationService;
     }
 
     //stuffs
-    //Create a Collections to store and retrieve a reservation
-    private Collection<Reservation> reservations = new ArrayList<>();
+    //Create a list to store and retrieve a reservation
+    private final List<Reservation> reservations = new ArrayList<>();
 
-    //A collection to store all the rooms
-    private Map<String, IRoom> roomMap = new HashMap<String, IRoom>();
+    //A hashmap (dictionary) to store all the rooms by key roomnumber
+    private Map<String, IRoom> roomMap = new HashMap<>();
+
+    //hashmap (aka dictionary) of rooms and reservations, lookup by room number?
+    Map<IRoom, List<Reservation>> mapOfReservations = new HashMap<>();
 
     public void addRoom(IRoom room) {
         try {
@@ -33,7 +36,6 @@ public class ReservationService {
             }
         }
         catch (Exception ex) {
-            //ex.getLocalizedMessage();
             System.out.println(ex.getLocalizedMessage());
         }
 
@@ -57,28 +59,70 @@ public class ReservationService {
 
     public Collection<IRoom> getAllRooms() {
         System.out.println("Called getAllRooms() in the ReservationService");
-        return roomMap.values();
+        var listOfRooms = roomMap.values();
+        return listOfRooms;
+        //return this directly after testing/debugging;
     }
 
-    public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkoutDate) {
-        var reservation = new Reservation(customer, room, checkInDate, checkoutDate);
+    public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {
+        var reservation = new Reservation(customer, room, checkInDate, checkOutDate);
         try {
+            if (checkInDate.after(checkOutDate) || checkInDate.equals(checkOutDate))
+            {
+                throw new InvalidCheckInDatesException("Check out date must be after the check in date.");
+            }
             reservations.add(reservation);
         }
         catch (Exception ex) {
-
+            System.out.println(ex.getMessage());
         }
         return reservation;
     }
-    public Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
-        return null;
-        //to get to compile
+    public Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate){
+        Collection<IRoom> availableRooms = new ArrayList<>();
 
+        var allRooms = getAllRooms();
+        // find all the rooms that aren't booked at all
+        for(IRoom room : allRooms){
+
+            if(findUnbookedRoom(room)){
+                availableRooms.add(room);
+            }
+
+        }
+        for(Reservation reservation : reservations){
+            Date reservationCheckInDate = reservation.getCheckInDate();
+            Date reservationCheckOutDate = reservation.getCheckOutDate();
+            if(checkInDate.before(reservationCheckInDate) && checkOutDate.before(reservationCheckInDate) || checkInDate.after(reservationCheckOutDate) && checkOutDate.after(reservationCheckOutDate)
+                && !availableRooms.contains(reservation.getRoom())) {
+                availableRooms.add(reservation.getRoom());
+            }
+        }
+
+        return availableRooms;
     }
-    public Collection<Reservation> getCustomersReservation(Customer customer) {
-        return null;
-        //to get to compile
+
+    boolean findUnbookedRoom(IRoom room){
+        boolean isUnbooked = true;
+        for(Reservation r: reservations){
+            if(room.getRoomNumber().equals(r.getRoom().getRoomNumber())){
+                isUnbooked = false;
+            }
+        }
+        return isUnbooked;
     }
+
+    public Collection<Reservation> getCustomersReservations(Customer customer) {
+        List<Reservation> customerReservations = new ArrayList<>();
+
+        for (Reservation reservation : reservations) {
+            if (Objects.equals(customer.getEmail(), reservation.getCustomer().getEmail())) {
+                customerReservations.add(reservation);
+            }
+        }
+        return customerReservations;
+    }
+
     public void printAllReservations() {
         if (reservations.isEmpty()) {
             System.out.println("No reservations were found in the system.");

@@ -4,6 +4,7 @@ import model.Customer;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CustomerService {
@@ -50,8 +51,8 @@ public class CustomerService {
         else return null;
     }
 
-    public Collection<Customer> getAllCustomers() {
-        return customersMap.values();
+    public List<Customer> getAllCustomers() {
+        return customersMap.values().stream().toList();
     }
 
 

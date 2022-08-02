@@ -5,6 +5,7 @@ import model.IRoom;
 import model.Reservation;
 import service.CustomerService;
 import service.ReservationService;
+import ui.MainMenu;
 
 import java.util.Collection;
 import java.util.Date;
@@ -27,6 +28,10 @@ public class HotelResource {
 
     public Customer getCustomer(String email) {
         var customer = CustomerService.getInstance().getCustomer(email);
+        if (customer == null) {
+            System.out.println("Customer was not found. Returning to main menu");
+            MainMenu.printMainMenu();
+        }
         return customer;
     }
     public void createACustomer(String email, String firstName, String lastName) {
@@ -49,12 +54,12 @@ public class HotelResource {
     }
 
     public Collection<Reservation> getCustomersReservations(String customerEmail) {
-        return null;
-        //to get to compile
+        return ReservationService.getInstance().getCustomersReservations(getCustomer(customerEmail));
     }
 
     public Collection<IRoom> findARoom(Date checkIn, Date checkOut){
-        return null;
+        var availableRooms = ReservationService.getInstance().findRooms(checkIn, checkOut);
+        return availableRooms;
         //to get to compile
     }
 }

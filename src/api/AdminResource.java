@@ -24,10 +24,11 @@ public class AdminResource {
 
     public Customer getCustomer(String email) {
         return null;
+
         //to get to compile
     };
 
-    public void addRooms(List<IRoom> rooms) {  //should AddRoom be taking in a List of rooms? Dont we just want to add one room here?
+    public void addRooms(List<IRoom> rooms) {
         for (IRoom room : rooms) {
             ReservationService.getInstance().addRoom(room);
         }
@@ -38,7 +39,7 @@ public class AdminResource {
         return allRooms;
     }
 
-    public Collection<Customer> getAllCustomers() {
+    public List<Customer> getAllCustomers() {
         var customers = CustomerService.getInstance().getAllCustomers();
         return customers;
     };

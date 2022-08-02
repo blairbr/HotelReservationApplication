@@ -6,6 +6,21 @@ public class Room implements IRoom {
     private Double price;
     private RoomType roomType;
 
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
+
+    private boolean isAvailable;
+
+    @Override
+    public boolean isFree() {
+        return false;
+    }
+
     public Room(Double price, RoomType roomType, String roomNumber) {
         super();  //do i need this?
         this.roomNumber = roomNumber;
@@ -53,10 +68,6 @@ public class Room implements IRoom {
 //        return null;
 //    }
 //
-    @Override
-    public boolean isFree() {
-        return false;
-    }
 
     @Override
     public String toString() {

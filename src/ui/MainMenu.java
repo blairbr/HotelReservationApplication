@@ -5,7 +5,6 @@ import model.IRoom;
 import model.Reservation;
 import service.InvalidCheckInDatesException;
 import service.ReservationService;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -85,7 +84,7 @@ public class MainMenu {
     }
 
 
-    private static void reserveRoom(Scanner scanner) throws ParseException {
+    private static void reserveRoom(Scanner scanner) throws ParseException, InterruptedException {
         System.out.println("Enter Check In date - mm/dd/yyyy - example: 07/25/2023");
         var checkInDateString = scanner.nextLine();
 
@@ -128,15 +127,23 @@ public class MainMenu {
             var room = ReservationService.getInstance().getARoom(roomNumberToReserve);
             var reservation = ReservationService.getInstance().reserveARoom(customer, room, checkInDate, checkOutDate);
             System.out.println("Reservation created -- \n" + reservation.toString());
+            printMainMenu();
         }
         else if (userResponse.equalsIgnoreCase("N") || userResponse.equalsIgnoreCase("No")) {
-            createAccount(scanner);
+            var email = createAccount(scanner);
+            var customer = HotelResource.getInstance().getCustomer(email);
+            System.out.println("Welcome " + customer.getFirstName());
+            System.out.println("What room would you like to reserve?");
+            var roomNumberToReserve = scanner.nextLine();
+            var room = ReservationService.getInstance().getARoom(roomNumberToReserve);
+            var reservation = ReservationService.getInstance().reserveARoom(customer, room, checkInDate, checkOutDate);
+            System.out.println("Reservation created -- \n" + reservation.toString());
             System.out.println("Returning to the main menu.");
             printMainMenu();
         }
     }
 
-    private static void createAccount(Scanner scanner) {
+    private static String createAccount(Scanner scanner) {
         System.out.println("Enter your email address:");
         var email = scanner.nextLine();
 
@@ -147,5 +154,6 @@ public class MainMenu {
         var lastName = scanner.nextLine();
 
         HotelResource.getInstance().createACustomer(email, firstName,lastName);
+        return email;
     }
 }

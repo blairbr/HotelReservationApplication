@@ -33,7 +33,6 @@ public class AdminMenu {
                     switch (adminMenuChoiceAsInteger) {
                         case 1:
                             printAllCustomers();
-                            TimeUnit.SECONDS.sleep(2);
                             MainMenu.printMainMenu();
                             continueRunning = false;
                             break;
@@ -41,8 +40,6 @@ public class AdminMenu {
                             //See all Rooms
                             continueRunning = false;
                             displayAllRooms();
-                            //sleep for 2 seconds so the menu doesn't cover the rooms
-                            TimeUnit.SECONDS.sleep(2);
                             MainMenu.printMainMenu();
                             break;
                         case 3://SEE ALL RESERVATIONS

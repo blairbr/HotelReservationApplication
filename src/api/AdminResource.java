@@ -32,7 +32,7 @@ public class AdminResource {
         for (IRoom room : rooms) {
             ReservationService.getInstance().addRoom(room);
         }
-    };
+    }
 
     public Collection<IRoom> getAllRooms() {
         var allRooms = ReservationService.getInstance().getAllRooms();

@@ -53,8 +53,8 @@ public class ReservationService {
     }
 
     public IRoom getARoom(String roomId) {
-            return null;
-            //to get to compile
+       var room =  roomMap.get(roomId);
+       return room;
     }
 
     public Collection<IRoom> getAllRooms() {
@@ -90,11 +90,29 @@ public class ReservationService {
             }
 
         }
+
+       // boolean requestedCheckInandCheckOutDatesAreBothBeforeReservationCheckIn;
+
         for(Reservation reservation : reservations){
+            boolean requestedCheckInAndCheckOutDatesAreBothBEFOREReservationCheckIn = false;
+            boolean requestedCheckInAndCheckOutDatesAreBothAFTERReservationCheckIn = false;
+            boolean availableRoomsListAlreadyContainsTheRoom = false;
+
             Date reservationCheckInDate = reservation.getCheckInDate();
             Date reservationCheckOutDate = reservation.getCheckOutDate();
-            if(checkInDate.before(reservationCheckInDate) && checkOutDate.before(reservationCheckInDate) || checkInDate.after(reservationCheckOutDate) && checkOutDate.after(reservationCheckOutDate)
-                && !availableRooms.contains(reservation.getRoom())) {
+
+            if (checkInDate.before(reservationCheckInDate) && checkOutDate.before(reservationCheckInDate))
+            {
+                requestedCheckInAndCheckOutDatesAreBothBEFOREReservationCheckIn = true;
+            }
+            if (checkInDate.after(reservationCheckOutDate) && checkOutDate.after(reservationCheckOutDate)) {
+                requestedCheckInAndCheckOutDatesAreBothAFTERReservationCheckIn = true;
+            }
+            if (availableRooms.contains(reservation.getRoom())) {
+                availableRoomsListAlreadyContainsTheRoom = true;
+            }
+
+            if (!availableRoomsListAlreadyContainsTheRoom &&  (requestedCheckInAndCheckOutDatesAreBothBEFOREReservationCheckIn || requestedCheckInAndCheckOutDatesAreBothAFTERReservationCheckIn))  {
                 availableRooms.add(reservation.getRoom());
             }
         }

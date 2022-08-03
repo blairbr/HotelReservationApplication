@@ -1,10 +1,8 @@
 package ui;
 
 import api.HotelResource;
-import model.Customer;
 import model.IRoom;
 import model.Reservation;
-import service.CustomerService;
 import service.InvalidCheckInDatesException;
 import service.ReservationService;
 
@@ -12,7 +10,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 public class MainMenu {
     public static void main(String[] args) {
@@ -47,8 +44,6 @@ public class MainMenu {
                             printMainMenu();
                             break;
                         case 3:
-                            //create an account
-
                             continueRunning = false;
                             createAccount(scanner);
                             printMainMenu();
@@ -91,14 +86,13 @@ public class MainMenu {
 
 
     private static void reserveRoom(Scanner scanner) throws ParseException {
-        System.out.println("Enter Check In date - mm/dd/yyy - example: 07/25/2023");
+        System.out.println("Enter Check In date - mm/dd/yyyy - example: 07/25/2023");
         var checkInDateString = scanner.nextLine();
 
-        System.out.println("Enter Check Out date - mm/dd/yyy - example: 07/30/2023");
+        System.out.println("Enter Check Out date - mm/dd/yyyy - example: 07/30/2023");
         var checkOutDateString = scanner.nextLine();
         Date checkInDate= new SimpleDateFormat("M/d/yyyy").parse(checkInDateString);
         Date checkOutDate =new SimpleDateFormat("M/d/yyyy").parse(checkOutDateString);
-
 
         try {
             if (checkInDate.after(checkOutDate) || checkInDate.equals(checkOutDate))
@@ -111,7 +105,6 @@ public class MainMenu {
             reserveRoom(scanner);
         }
 
-        //check availabilty - call into another class
         var availableRooms = HotelResource.getInstance().findARoom(checkInDate, checkOutDate);
         if (availableRooms.isEmpty()) {
             System.out.println("No rooms are available between " + checkInDateString + " and " + checkOutDateString);
@@ -119,7 +112,6 @@ public class MainMenu {
             printMainMenu();
         }
         System.out.println("--Available Rooms: --");
-        //here it prints out the available rooms
         for (IRoom availableRoom: availableRooms) {
             System.out.println(availableRoom.toString());
         }

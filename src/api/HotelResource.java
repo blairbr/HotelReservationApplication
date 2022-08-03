@@ -39,18 +39,12 @@ public class HotelResource {
     }
 
     public IRoom getRoom(String roomNumber) {
-        //this should basically just call the service class
-        return null;
-        //to get to compile
-        //
-        // why are these methods public and not private??
+       return ReservationService.getInstance().getARoom(roomNumber);
     }
 
-    //need to get the customer by the email
     public Reservation bookARoom(String customerEmail, IRoom room, Date checkInDate, Date checkOutDate) {
         var customer = HotelResource.getInstance().getCustomer(customerEmail);
-        var reservation = ReservationService.getInstance().reserveARoom(customer, room, checkInDate, checkOutDate);
-        return reservation;
+        return ReservationService.getInstance().reserveARoom(customer, room, checkInDate, checkOutDate);
     }
 
     public Collection<Reservation> getCustomersReservations(String customerEmail) {
@@ -58,8 +52,6 @@ public class HotelResource {
     }
 
     public Collection<IRoom> findARoom(Date checkIn, Date checkOut){
-        var availableRooms = ReservationService.getInstance().findRooms(checkIn, checkOut);
-        return availableRooms;
-        //to get to compile
+        return ReservationService.getInstance().findRooms(checkIn, checkOut);
     }
 }

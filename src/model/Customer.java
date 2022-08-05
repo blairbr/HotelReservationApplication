@@ -10,6 +10,18 @@ public class Customer {
     private final String emailRegex = "^(.+)@(.+).(.+)$";
     private final Pattern pattern = Pattern.compile(emailRegex);
 
+    //override hashcode
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    //override equals
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
     public Customer(String email, String firstName, String lastName)
     {
         if(!pattern.matcher(email).matches()){
@@ -20,7 +32,6 @@ public class Customer {
         this.lastName = lastName;
     }
 
-    //how do you know which need getters and setters? a) you need for all private properties on the class
     public String getFirstName() {
         return firstName;
     }

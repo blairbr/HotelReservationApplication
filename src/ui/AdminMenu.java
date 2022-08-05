@@ -2,14 +2,9 @@ package ui;
 
 import api.AdminResource;
 import api.HotelResource;
-import com.sun.tools.javac.Main;
 import model.*;
 import service.CustomerService;
-import service.ReservationService;
-
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class AdminMenu {
     public static void printAdminMenu() {
@@ -37,24 +32,23 @@ public class AdminMenu {
                             continueRunning = false;
                             break;
                         case 2:
-                            //See all Rooms
                             continueRunning = false;
                             displayAllRooms();
                             MainMenu.printMainMenu();
                             break;
-                        case 3://SEE ALL RESERVATIONS
+                        case 3:
                             AdminResource.getInstance().displayAllReservations();
                             continueRunning = false;
                             MainMenu.printMainMenu();
                             break;
-                        case 4://add a room
+                        case 4:
                             continueRunning = false;
                             addARoom(scanner);
                             MainMenu.printMainMenu();
                             break;
                         case 5:
                             continueRunning = false;
-                            seedTestData(scanner);
+                            seedTestData();
                             MainMenu.printMainMenu();
                             break;
                         case 6:
@@ -86,7 +80,7 @@ public class AdminMenu {
         }
     }
 
-    private static void seedTestData(Scanner scanner) {
+    private static void seedTestData() {
         IRoom room101 = new Room(150.0, RoomType.SINGLE, "101");
         IRoom room102 = new Room(175.0, RoomType.DOUBLE, "102");
         IRoom room103 = new Room(200.0, RoomType.DOUBLE, "103");
@@ -98,7 +92,6 @@ public class AdminMenu {
         Customer customer2 = new Customer("Danielle.Riveras@gmail.com", "Danielle", "Riveras-Rojas");
         Customer customer3 = new Customer("Arjun.Submaranian@juno.com", "Arjun", "Submaranian");
         Customer customer4 = new Customer("me@me.com", "Blair", "Brown");
-
 
         List<Customer> customersList = new ArrayList<Customer>(Arrays.asList(customer1, customer2, customer3, customer4));
 
@@ -120,9 +113,6 @@ public class AdminMenu {
         calendar.set(2022, Calendar.APRIL, 4);
         Date april4 = calendar.getTime();
 
-        System.out.println("April 4 = " + april4);
-        System.out.println("July 7 = " + july7);
-
         calendar.set(2022, Calendar.AUGUST, 27);
         Date august27 = calendar.getTime();
 
@@ -140,11 +130,6 @@ public class AdminMenu {
         var reservation3 = HotelResource.getInstance().bookARoom(customer3.getEmail(), room102, august27, august28);
         var reservation4 = HotelResource.getInstance().bookARoom(customer4.getEmail(), room104, august27, august28);
         var reservation5 = HotelResource.getInstance().bookARoom(customer4.getEmail(), room104, sept17, sept19);
-
-
-
-
-
     }
 
     private static void displayAllRooms() {
@@ -168,7 +153,7 @@ public class AdminMenu {
         while (!roomNumberIsValid) {
             System.out.println("Enter a room number");
             roomNumberAsString = scanner.nextLine();
-            roomNumberIsValid = checkIfRoomNumberIsValid(roomNumberAsString, scanner);
+            roomNumberIsValid = checkIfRoomNumberIsValid(roomNumberAsString);
         }
 
         System.out.println("Enter price per night: ");
@@ -178,7 +163,6 @@ public class AdminMenu {
         System.out.println("Enter room type - 1 for single bed or 2 for double bed: ");
         String roomTypeAsString = scanner.nextLine().toUpperCase();
 
-        //default to single - fix this later and add validation - there has to be a way to use the value of too
         RoomType roomType = RoomType.SINGLE;
 
         if (roomTypeAsString.equals("1")) {
@@ -190,7 +174,7 @@ public class AdminMenu {
         }
 
         IRoom room = new Room(pricePerNight, roomType, roomNumberAsString);
-        List<IRoom> rooms = new ArrayList<IRoom>();
+        List<IRoom> rooms = new ArrayList<>();
 
         rooms.add(room);
         AdminResource.getInstance().addRooms(rooms);
@@ -206,7 +190,7 @@ public class AdminMenu {
         MainMenu.printMainMenu();
     }
 
-    private static boolean checkIfRoomNumberIsValid(String roomNumberAsString, Scanner scanner) {
+    private static boolean checkIfRoomNumberIsValid(String roomNumberAsString) {
         try {
             Integer.parseInt(roomNumberAsString);
             return true;

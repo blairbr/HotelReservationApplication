@@ -9,23 +9,17 @@ import java.util.Collection;
 import java.util.List;
 
 public class AdminResource {
-    //0. provide a static reference
 
-    //1. create an object of Admin Resource
     private static final AdminResource adminResource = new AdminResource();
 
-    //2. make the constructor private so that this class cannot be instantiated
     private AdminResource() {}
 
-    //3. get the instance (the only one available) return the singleton
     public static AdminResource getInstance() {
         return adminResource;
     }
 
     public Customer getCustomer(String email) {
-        return null;
-
-        //to get to compile
+        return HotelResource.getInstance().getCustomer(email);
     };
 
     public void addRooms(List<IRoom> rooms) {

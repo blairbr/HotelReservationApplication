@@ -7,24 +7,15 @@ import model.Reservation;
 import java.util.*;
 
 public class ReservationService {
-    //no 1. private constructors
     private ReservationService() {}
-    //no 2.
     private static final ReservationService reservationService = new ReservationService();
-    //no 3.
     public static ReservationService getInstance() {
         return reservationService;
     }
 
-    //stuffs
-    //Create a list to store and retrieve a reservation
     private final List<Reservation> reservations = new ArrayList<>();
 
-    //A hashmap (dictionary) to store all the rooms by key roomnumber
     private Map<String, IRoom> roomMap = new HashMap<>();
-
-    //hashmap (aka dictionary) of rooms and reservations, lookup by room number?
-    Map<IRoom, List<Reservation>> mapOfReservations = new HashMap<>();
 
     public void addRoom(IRoom room) {
         try {
@@ -42,26 +33,18 @@ public class ReservationService {
     }
 
     private void checkIfRoomAlreadyExists(IRoom room) throws DuplicateRoomException {
-        //try()
-        System.out.println("PRINTING THE MAP AT THIS POINT: " +  roomMap);
-
         System.out.println("Room getRoomNumber() " + room.getRoomNumber());
         if (roomMap.containsKey(room.getRoomNumber())) {
-            //throw an exception and catch it higher up the chain.
             throw new DuplicateRoomException("This room number already exists in the system.");
         }
     }
 
     public IRoom getARoom(String roomId) {
-       var room =  roomMap.get(roomId);
-       return room;
+       return roomMap.get(roomId);
     }
 
     public Collection<IRoom> getAllRooms() {
-        System.out.println("Called getAllRooms() in the ReservationService");
-        var listOfRooms = roomMap.values();
-        return listOfRooms;
-        //return this directly after testing/debugging;
+        return roomMap.values();
     }
 
     public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {
@@ -82,16 +65,11 @@ public class ReservationService {
         Collection<IRoom> availableRooms = new ArrayList<>();
 
         var allRooms = getAllRooms();
-        // find all the rooms that aren't booked at all
         for(IRoom room : allRooms){
-
-            if(findUnbookedRoom(room)){
+            if(roomIsNotBooked(room)){
                 availableRooms.add(room);
             }
-
         }
-
-       // boolean requestedCheckInandCheckOutDatesAreBothBeforeReservationCheckIn;
 
         for(Reservation reservation : reservations){
             boolean requestedCheckInAndCheckOutDatesAreBothBEFOREReservationCheckIn = false;
@@ -120,7 +98,8 @@ public class ReservationService {
         return availableRooms;
     }
 
-    boolean findUnbookedRoom(IRoom room){
+    //default access modifier
+    boolean roomIsNotBooked(IRoom room){
         boolean isUnbooked = true;
         for(Reservation r: reservations){
             if(room.getRoomNumber().equals(r.getRoom().getRoomNumber())){

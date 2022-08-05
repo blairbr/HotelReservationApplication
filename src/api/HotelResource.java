@@ -11,17 +11,10 @@ import java.util.Collection;
 import java.util.Date;
 
 public class HotelResource {
-
-
-    //0. Provide a static reference
-
-    //1. create/new-up an object of Admin Resource
     private static HotelResource hotelResource = new HotelResource();
 
-    //2. make the constructor private so that this class cannot be instantiated
     private HotelResource() {
     }
-    //3. get the instance of the class
     public static HotelResource getInstance() {
         return hotelResource;
     }

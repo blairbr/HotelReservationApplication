@@ -1,12 +1,14 @@
 package ui;
 
 import api.HotelResource;
+import model.Customer;
 import model.IRoom;
 import model.Reservation;
 import service.InvalidCheckInDatesException;
 import service.ReservationService;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -84,7 +86,7 @@ public class MainMenu {
     }
 
 
-    private static void reserveRoom(Scanner scanner) throws ParseException, InterruptedException {
+    private static void reserveRoom(Scanner scanner) throws ParseException {
         System.out.println("Enter Check In date - mm/dd/yyyy - example: 07/25/2023");
         var checkInDateString = scanner.nextLine();
 
@@ -118,28 +120,38 @@ public class MainMenu {
         System.out.println("Do you have an account with us? Y or N");
         var userResponse = scanner.nextLine();
         if (userResponse.equalsIgnoreCase("Y") || userResponse.equalsIgnoreCase("Yes")) {
-            System.out.println("Enter your email address:");
-            var email = scanner.nextLine();
-            var customer = HotelResource.getInstance().getCustomer(email);
-            System.out.println("Welcome " + customer.getFirstName());
-            System.out.println("What room would you like to reserve?");
-            var roomNumberToReserve = scanner.nextLine();
-            var room = ReservationService.getInstance().getARoom(roomNumberToReserve);
-            var reservation = ReservationService.getInstance().reserveARoom(customer, room, checkInDate, checkOutDate);
-            System.out.println("Reservation created -- \n" + reservation.toString());
+            Customer customer = lookupCustomer(scanner);
+            chooseARoom(scanner, checkInDate, checkOutDate, availableRooms, customer);
             printMainMenu();
         }
         else if (userResponse.equalsIgnoreCase("N") || userResponse.equalsIgnoreCase("No")) {
             var email = createAccount(scanner);
             var customer = HotelResource.getInstance().getCustomer(email);
-            System.out.println("Welcome " + customer.getFirstName());
+            chooseARoom(scanner, checkInDate, checkOutDate, availableRooms, customer);
+            printMainMenu();
+        }
+    }
+
+    private static Customer lookupCustomer(Scanner scanner) {
+        System.out.println("Enter your email address:");
+        var email = scanner.nextLine();
+        var customer = HotelResource.getInstance().getCustomer(email);
+        System.out.println("Welcome " + customer.getFirstName());
+        return customer;
+    }
+
+    private static void chooseARoom(Scanner scanner, Date checkInDate, Date checkOutDate, Collection<IRoom> availableRooms, Customer customer) {
+        boolean roomChoiceIsValid = false;
+        while (!roomChoiceIsValid) {
             System.out.println("What room would you like to reserve?");
             var roomNumberToReserve = scanner.nextLine();
             var room = ReservationService.getInstance().getARoom(roomNumberToReserve);
-            var reservation = ReservationService.getInstance().reserveARoom(customer, room, checkInDate, checkOutDate);
-            System.out.println("Reservation created -- \n" + reservation.toString());
-            System.out.println("Returning to the main menu.");
-            printMainMenu();
+            if (availableRooms.contains(room)) {
+                roomChoiceIsValid = true;
+                var reservation = ReservationService.getInstance().reserveARoom(customer, room, checkInDate, checkOutDate);
+                System.out.println("Reservation created -- \n" + reservation.toString());
+            } else
+                System.out.println("Room " + roomNumberToReserve + " is not available on your selected dates. Please choose another room. ");
         }
     }
 

@@ -8,6 +8,7 @@ import service.InvalidCheckInDatesException;
 import service.ReservationService;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Scanner;
@@ -92,8 +93,8 @@ public class MainMenu {
 
         System.out.println("Enter Check Out date - mm/dd/yyyy - example: 07/30/2023");
         var checkOutDateString = scanner.nextLine();
-        Date checkInDate= new SimpleDateFormat("M/d/yyyy").parse(checkInDateString);
-        Date checkOutDate =new SimpleDateFormat("M/d/yyyy").parse(checkOutDateString);
+        Date checkInDate = new SimpleDateFormat("M/d/yyyy").parse(checkInDateString);
+        Date checkOutDate = new SimpleDateFormat("M/d/yyyy").parse(checkOutDateString);
 
         try {
             if (checkInDate.after(checkOutDate) || checkInDate.equals(checkOutDate))
@@ -106,16 +107,7 @@ public class MainMenu {
             reserveRoom(scanner);
         }
 
-        var availableRooms = HotelResource.getInstance().findARoom(checkInDate, checkOutDate);
-        if (availableRooms.isEmpty()) {
-            System.out.println("No rooms are available between " + checkInDateString + " and " + checkOutDateString);
-            System.out.println("Returning to the main menu");
-            printMainMenu();
-        }
-        System.out.println("--Available Rooms: --");
-        for (IRoom availableRoom: availableRooms) {
-            System.out.println(availableRoom.toString());
-        }
+        Collection<IRoom> availableRooms = findAvailableRooms(checkInDate, checkOutDate);
 
         System.out.println("Do you have an account with us? Y or N");
         var userResponse = scanner.nextLine();
@@ -130,6 +122,35 @@ public class MainMenu {
             chooseARoom(scanner, checkInDate, checkOutDate, availableRooms, customer);
             printMainMenu();
         }
+    }
+
+    private static Collection<IRoom> findAvailableRooms(Date checkInDate, Date checkOutDate) {
+        var availableRooms = HotelResource.getInstance().findARoom(checkInDate, checkOutDate);
+        if (availableRooms.isEmpty()) {
+            System.out.println("No rooms are available between " + checkInDate.toString() + " and " + checkOutDate.toString());
+
+            Calendar calendar = Calendar.getInstance();
+
+            calendar.setTime(checkInDate);
+            calendar.add(Calendar.DATE, 7);
+            Date checkInDatePlusSeven = calendar.getTime();
+
+            calendar.setTime(checkOutDate);
+            calendar.add(Calendar.DATE, 7);
+            Date checkOutDatePlusSeven = calendar.getTime();
+
+            System.out.println("You may be interested in the search results for available rooms checking in a week later on " + checkInDatePlusSeven + " and checking out " + checkOutDatePlusSeven);
+
+            findAvailableRooms(checkInDatePlusSeven, checkOutDatePlusSeven);
+
+            System.out.println("Returning to the main menu");
+            printMainMenu();
+        }
+        System.out.println("--Available Rooms: --");
+        for (IRoom availableRoom: availableRooms) {
+            System.out.println(availableRoom.toString());
+        }
+        return availableRooms;
     }
 
     private static Customer lookupCustomer(Scanner scanner) {
@@ -150,8 +171,9 @@ public class MainMenu {
                 roomChoiceIsValid = true;
                 var reservation = ReservationService.getInstance().reserveARoom(customer, room, checkInDate, checkOutDate);
                 System.out.println("Reservation created -- \n" + reservation.toString());
-            } else
-                System.out.println("Room " + roomNumberToReserve + " is not available on your selected dates. Please choose another room. ");
+            } else {
+                System.out.println("Room " + roomNumberToReserve + " is not available on your selected dates.");
+            }
         }
     }
 

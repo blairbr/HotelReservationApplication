@@ -21,7 +21,6 @@ public class ReservationService {
         try {
             checkIfRoomAlreadyExists(room);
             roomMap.put(room.getRoomNumber(), room);
-            System.out.println("ROOM LIST = " + roomMap);
             if (roomMap.containsKey(room.getRoomNumber())) {
                 System.out.println("Room " + room.getRoomNumber() + " was successfully added.");
             }
@@ -33,7 +32,6 @@ public class ReservationService {
     }
 
     private void checkIfRoomAlreadyExists(IRoom room) throws DuplicateRoomException {
-        System.out.println("Room getRoomNumber() " + room.getRoomNumber());
         if (roomMap.containsKey(room.getRoomNumber())) {
             throw new DuplicateRoomException("This room number already exists in the system.");
         }
